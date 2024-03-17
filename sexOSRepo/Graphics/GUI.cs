@@ -45,7 +45,7 @@ namespace sexOSKernel.Graphics
         private void DrawSaveAreaIndicator()
         {
             // Use a different pen color to distinguish the save area
-            Pen saveAreaPen = new Pen(Color.Green);
+            Pen saveAreaPen = new Pen(Color.Red);
             // Draw a 100x100 square starting at the top left corner (0,0)
             canvas.DrawRectangle(saveAreaPen, 0, 0, 800, 600);
         }
@@ -57,6 +57,10 @@ namespace sexOSKernel.Graphics
             if (MouseManager.MouseState == MouseState.Left)
             {
                 DrawOnClick(mousePosition);
+            }
+            else if(MouseManager.MouseState == MouseState.Right)
+            {
+                EraserClick(mousePosition);
             }
             else
             {
@@ -176,20 +180,43 @@ namespace sexOSKernel.Graphics
         private void DrawOnClick(Sys.Graphics.Point position)
         {
             Pen pen = new Pen(Color.Red);
-            canvas.DrawFilledRectangle(pen, position.X, position.Y, 4, 4);
+            canvas.DrawFilledRectangle(pen, position.X, position.Y, 3, 3);
+        }
+        private void EraserClick(Sys.Graphics.Point position)
+        {
+            Pen pen = new Pen(Color.White);
+            canvas.DrawFilledRectangle(pen, position.X, position.Y, 5, 5);
         }
 
         private void DrawMouseCursor(Sys.Graphics.Point position)
         {
-            if (lastMousePosition.X != -1 && lastMousePosition.Y != -1)
+            // Before drawing the new cursor position, restore the previous pixels
+            foreach (var savedPixel in savedPixels)
             {
-                Pen backgroundPen = new Pen(lastMousePositionColor);
-                canvas.DrawFilledRectangle(backgroundPen, lastMousePosition.X, lastMousePosition.Y, 2, 2);
+                Pen restorePen = new Pen(savedPixel.Item2); // Use the saved color
+                canvas.DrawFilledRectangle(restorePen, savedPixel.Item1.X, savedPixel.Item1.Y, 1, 1);
+            }
+            savedPixels.Clear(); // Clear the list after restoring
+
+            // Save the current colors under the cursor
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 2; y++)
+                {
+                    int posX = position.X + x;
+                    int posY = position.Y + y;
+                    Color color = canvas.GetPointColor(posX, posY);
+                    savedPixels.Add(new Tuple<Sys.Graphics.Point, Color>(new Sys.Graphics.Point(posX, posY), color));
+                }
             }
 
-            lastMousePosition = position;
-            Pen pen = new Pen(Color.Black);
-            canvas.DrawFilledRectangle(pen, position.X, position.Y, 2, 2);
+            // Draw the cursor
+            Pen cursorPen = new Pen(Color.Black);
+            canvas.DrawFilledRectangle(cursorPen, position.X, position.Y, 2, 2);
+
+            lastMousePosition = position; // Update the last position
         }
+
+
     }
 }

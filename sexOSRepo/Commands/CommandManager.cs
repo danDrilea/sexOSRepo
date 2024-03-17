@@ -29,7 +29,7 @@ namespace sexOSKernel.Commands
                           "- readstring: Read the contents of a file with the specified file path.\n\tUsage: file readstring FILE_PATH\n" +
                           "- listdir: List directories in the specified path.\n\tUsage: file listdir DIRECTORY_PATH"
                           ));
-            this.commands.Add(new launchGUI("launchgui", "Launches the GUI!"));
+            this.commands.Add(new launchGUI("draw", "DRAW! Press S to save, L to load and ESC to exit!"));
             this.commands.Add(new launchBadApple("badApple", "plays the Bad Apple animation!"));
         }
 
