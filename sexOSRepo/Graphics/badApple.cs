@@ -8,6 +8,7 @@ using Sys = Cosmos.System;
 using Console = System.Console;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
+using Cosmos.Core.Memory;
 
 namespace sexOSKernel.Graphics
 {
@@ -23,29 +24,30 @@ namespace sexOSKernel.Graphics
             canvas.Clear(Color.White);
 
             this.pen = new Pen(Color.Black);
-            //displayRandPoints(1022, 766);
+
+            // Refresh the canvas to display the updated state
+            canvas.Display();
         }
+
 
         private void displayRandPoints(int height, int width)
         {
             Random rand = new Random();
-            for (int i = 3; i < height; i++)
+            for (int i = 2; i < height; i++)
             {
-                for (int j = 3; j < width; j++)
+                for (int j = 2; j < width; j++)
                 {
                     pen.Color = Color.FromArgb(255, rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
                     canvas.DrawPoint(pen, new Sys.Graphics.Point(i, j));
                 }
             }
         }
-public void handleAppleInputs()
+        public void handleAppleInputs()
         {
-            CheckForExit();
-            CheckForPress();
+            CheckKeypress();
             canvas.Display();
         }
-
-        private void CheckForPress()
+        private void CheckKeypress()
         {
             if (KeyboardManager.KeyAvailable)
             {
@@ -53,13 +55,7 @@ public void handleAppleInputs()
                 {
                     displayRandPoints(1022, 766);
                 }
-            }
-        }
-        private void CheckForExit()
-        {
-            if (KeyboardManager.KeyAvailable)
-            {
-                if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Escape)
+                else if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Escape)
                 {
                     ShouldExitApple = true;
                 }
