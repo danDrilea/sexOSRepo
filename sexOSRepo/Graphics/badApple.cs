@@ -25,15 +25,18 @@ namespace sexOSKernel.Graphics
             canvas.Clear(Color.White);
 
             this.pen = new Pen(Color.Black);
-            //displayRandPoints(1022, 766);
+
+            // Refresh the canvas to display the updated state
+            canvas.Display();
         }
+
 
         private void displayRandPoints(int height, int width)
         {
             Random rand = new Random();
-            for (int i = 3; i < height; i++)
+            for (int i = 2; i < height; i++)
             {
-                for (int j = 3; j < width; j++)
+                for (int j = 2; j < width; j++)
                 {
                     pen.Color = Color.FromArgb(255, rand.Next(0, 255), rand.Next(0, 255), rand.Next(0, 255));
                     canvas.DrawPoint(pen, new Sys.Graphics.Point(i, j));
