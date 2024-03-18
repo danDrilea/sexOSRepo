@@ -19,7 +19,7 @@ namespace sexOSKernel.Graphics
         public bool ShouldExitApple { get; private set; } = false;
         public static Canvas canvas;
         private Pen pen;
-        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.frame_120.txt")] public static byte[] test_image;
+        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.frame_110.txt")] public static byte[] test_image;
         public badApple() //constructor
         {
             canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
@@ -60,6 +60,7 @@ namespace sexOSKernel.Graphics
                 if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Enter)
                 {
                     displayRandPoints(1022, 766);
+                    canvas.Display();
                 }
                 else if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Escape)
                 {
@@ -100,8 +101,9 @@ namespace sexOSKernel.Graphics
                     index++;
                 }
                 canvas.Display(); // Refresh the canvas to display the drawn image once all pixels are drawn
-
             }
+            
+
         }
     }
 

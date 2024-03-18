@@ -7,6 +7,7 @@ using Sys = Cosmos.System;
 using sexOSKernel.Commands;
 using Cosmos.System.FileSystem;
 using sexOSKernel.Graphics;
+using sexOSRepo.Graphics;
 
 namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
 {
@@ -19,6 +20,7 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
 
         public static GUI gui;
         public static badApple badapple;
+        public static imageGUI imagegui;
 
         //imi bag pula in ea de viata
         protected override void BeforeRun()
@@ -55,6 +57,15 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 ExitBadAppleMode();
                 badapple = null; // Reset GUI to null if you're done with it
             }
+            else if(imagegui != null && !imagegui.shouldExitImageGUI)
+            {
+                    imagegui.handleImageGUIinput();
+            }
+            else if(imagegui != null && imagegui.shouldExitImageGUI)
+            {
+                ExitImageGUIMode();
+                imagegui = null;
+            }
             else
             {
                 // Handle console input/output as before
@@ -72,6 +83,14 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
             Console.Clear();
             Console.WriteLine("Back to console mode.");
 
+            // Re-enable console input if it was disabled during GUI mode
+        }
+        private void ExitImageGUIMode()
+        {
+            // Potentially clear the console and reset any needed console settings
+            Console.Clear();
+            Console.WriteLine("Back to console mode.");
+            imageGUI.canvas.Disable();
             // Re-enable console input if it was disabled during GUI mode
         }
         private void ExitGUIMode()

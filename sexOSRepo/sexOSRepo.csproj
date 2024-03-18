@@ -17,9 +17,13 @@
         <Profile>VMware</Profile>
         <Description>Use VMware Player or Workstation to deploy and debug.</Description>
         <PxeInterface>192.168.0.8</PxeInterface>
+        <CompileVBEMultiboot>False</CompileVBEMultiboot>
+        <VBEResolution>1024x768x32</VBEResolution>
+        <OptimizationLevel>2</OptimizationLevel>
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="badAppleBMP\cursor.bmp" />
       <None Remove="badAppleBMP\frame_0001.bmp" />
       <None Remove="badAppleBMP\frame_0002.bmp" />
       <None Remove="badAppleBMP\frame_0003.bmp" />
@@ -458,9 +462,14 @@
       <None Remove="badAppleBMP\frame_97.txt" />
       <None Remove="badAppleBMP\frame_98.txt" />
       <None Remove="badAppleBMP\frame_99.txt" />
+      <None Remove="badAppleBMP\RATON!.bmp" />
+      <None Remove="badAppleBMP\raton.bmp" />
+      <None Remove="badAppleBMP\raton_1024x768.bmp" />
+      <None Remove="badAppleBMP\retard.txt" />
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="badAppleBMP\cursor.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_1.txt" />
       <EmbeddedResource Include="badAppleBMP\frame_10.txt" />
       <EmbeddedResource Include="badAppleBMP\frame_100.txt" />
@@ -680,6 +689,9 @@
       <EmbeddedResource Include="badAppleBMP\frame_97.txt" />
       <EmbeddedResource Include="badAppleBMP\frame_98.txt" />
       <EmbeddedResource Include="badAppleBMP\frame_99.txt" />
+      <EmbeddedResource Include="badAppleBMP\raton.bmp" />
+      <EmbeddedResource Include="badAppleBMP\raton_1024x768.bmp" />
+      <EmbeddedResource Include="badAppleBMP\retard.txt" />
     </ItemGroup>
 
     <ItemGroup>
