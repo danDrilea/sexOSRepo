@@ -9,6 +9,8 @@ using Console = System.Console;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using IL2CPU.API.Attribs;
+using System.IO;
+using System.Reflection;
 
 namespace sexOSKernel.Graphics
 {
@@ -17,20 +19,23 @@ namespace sexOSKernel.Graphics
         public bool ShouldExitApple { get; private set; } = false;
         public static Canvas canvas;
         private Pen pen;
-        int index = 0;
-        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.frame_198.bmp")] public static byte[] test_image;
+        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.frame_120.txt")] public static byte[] test_image;
         public badApple() //constructor
         {
             canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
             canvas.Clear(Color.White);
-
             this.pen = new Pen(Color.Black);
-
-            // Refresh the canvas to display the updated state
-            canvas.Display();
         }
 
-
+        private string ReadTextFromResource(string resourceName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
         private void displayRandPoints(int height, int width)
         {
             Random rand = new Random();
@@ -46,7 +51,7 @@ namespace sexOSKernel.Graphics
         public void handleAppleInputs()
         {
             CheckKeypress();
-            canvas.Display();
+            //canvas.Display();
         }
         private void CheckKeypress()
         {
@@ -62,36 +67,45 @@ namespace sexOSKernel.Graphics
                 }
                 else if(KeyboardManager.ReadKey().Key == ConsoleKeyEx.Tab)
                 {
-                    DrawImageFromBytes(test_image, 100, 100);
+                   DrawImageFromBytes(test_image, 800, 603);
                 }
             }
         }
+        Pen whitePen = new Pen(Color.White);
         private void DrawImageFromBytes(byte[] imageData, int width, int height)
         {
-            if (imageData.Length < width * height)
+            int index = 0; // Index for the position in the imageData array
+            for (int y = 0; y < height && index < imageData.Length; y++)
             {
-                throw new ArgumentException("Image data does not have enough pixels for the specified width and height.");
-            }
-
-            pen.Color = Color.Black; // Set pen color once if all drawn pixels are black
-
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < width && index < imageData.Length; x++)
                 {
-                    int index = y * width + x;
-                    if (imageData[index] == 0) // Assuming '0' represents black pixels
+                    // Check if we've encountered a newline character. If so, skip it.
+                    while (imageData[index] == 10 || imageData[index] == 13)
                     {
-                        canvas.DrawPoint(pen, new Sys.Graphics.Point(x, y));
+                        index++; // Skip the newline or carriage return characters
                     }
-                    // Skip drawing white pixels assuming the canvas is already cleared to white
+
+                    // Draw black pixel for '0'
+                    if (imageData[index] == 48) // ASCII '0'
+                    {
+                        canvas.DrawPoint(pen, x, y); // Black pixel
+                    }
+                    // Draw white pixel for '1'
+                    else if (imageData[index] == 49) // ASCII '1'
+                    {
+                        canvas.DrawPoint(whitePen, x, y); // White pixel
+                    }
+                    // Increment index after drawing
+                    if(index + 1 < imageData.Length)
+                    index++;
                 }
+                canvas.Display(); // Refresh the canvas to display the drawn image once all pixels are drawn
+
             }
-            canvas.Display(); // Refresh the canvas to display the drawn image
         }
-
-
-
-
     }
+
+
+
+
 }
