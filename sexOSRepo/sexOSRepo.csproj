@@ -2434,10 +2434,11 @@
       <None Remove="badAppleBMP\raton_1024x768.bmp" />
       <None Remove="badAppleBMP\retard.txt" />
       <None Remove="badAppleBMP\termopan.bmp" />
+      <None Remove="GUIBMP\termopan-boop.bmp" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="badAppleBMP\cursor.bmp" />
+      <EmbeddedResource Include="GUIBMP\cursor.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0001.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0002.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0003.bmp" />
@@ -2715,9 +2716,9 @@
       <EmbeddedResource Include="badAppleBMP\frame_0275.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0276.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0277.bmp" />
-      <EmbeddedResource Include="badAppleBMP\raton_1024x768.bmp" />
-      <EmbeddedResource Include="badAppleBMP\retard.txt" />
-      <EmbeddedResource Include="badAppleBMP\termopan.bmp" />
+      <EmbeddedResource Include="GUIBMP\raton_1024x768.bmp" />
+      <EmbeddedResource Include="GUIBMP\termopan-boop.bmp" />
+      <EmbeddedResource Include="GUIBMP\termopan.bmp" />
     </ItemGroup>
 
     <ItemGroup>

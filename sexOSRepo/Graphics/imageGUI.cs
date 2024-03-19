@@ -11,21 +11,22 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using GraphicPoint = Cosmos.System.Graphics.Point;
+
 namespace sexOSRepo.Graphics
 {
     public class imageGUI
     {
         public bool shouldExitImageGUI { get; private set; } = false;
-        public int termopanX, termopanY;
-        public bool isTermopanOpen = true;
-        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.raton_1024x768.bmp")] public static byte[] test_image;
+
+        Termopan termopan;
+
+        [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.raton_1024x768.bmp")] public static byte[] test_image;
         public static Bitmap image_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//background
 
-        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.cursor.bmp")] public static byte[] cursor_image;
-        public static Bitmap cursor_bitmap = new Bitmap(32, 32, ColorDepth.ColorDepth32);//cursor
 
-        [ManifestResourceStream(ResourceName = "sexOSRepo.badAppleBMP.termopan.bmp")] public static byte[] termopan_image;
-        public static Bitmap termopan_bitmap = new Bitmap(32, 32, ColorDepth.ColorDepth32);//termopan
+        [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.cursor.bmp")] public static byte[] cursor_image;
+        public static Bitmap cursor_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//background
+
         public static Canvas canvas;
         public imageGUI() 
         {
@@ -37,7 +38,8 @@ namespace sexOSRepo.Graphics
             canvas.Clear(Color.White);
             image_bitmap = new Bitmap(test_image, ColorOrder.BGR);
             cursor_bitmap = new Bitmap(cursor_image, ColorOrder.BGR);
-            termopan_bitmap = new Bitmap(termopan_image, ColorOrder.BGR);
+
+            termopan = new Termopan();
         }
 
         public void handleImageGUIinput()
@@ -45,9 +47,11 @@ namespace sexOSRepo.Graphics
             // Ensure the background is redrawn every frame
             canvas.DrawImage(image_bitmap, 0, 0);
 
+            
             // Assuming termopanX and termopanY are defined elsewhere in your class
-            if (isTermopanOpen)
-            canvas.DrawImage(termopan_bitmap, termopanX, termopanY);
+            if (termopan.isOpen())
+
+            canvas.DrawImage(Termopan.bitmap, termopan.getX(), termopan.getY());
 
             // Clamp MouseManager.X and MouseManager.Y within the screen boundaries
             int mouseX = Math.Clamp((int)MouseManager.X, 0, (int)(MouseManager.ScreenWidth - cursor_bitmap.Width + 15));
@@ -57,26 +61,28 @@ namespace sexOSRepo.Graphics
             canvas.DrawImageAlpha(cursor_bitmap, mouseX, mouseY);
 
             // Check if the mouse cursor intersects with the termopan
-            if (isTermopanOpen && (mouseX < termopanX + termopan_bitmap.Width && mouseX + cursor_bitmap.Width > termopanX && mouseY < termopanY + termopan_bitmap.Height && mouseY + cursor_bitmap.Height > termopanY))
+            if(termopan.isOpen() && (mouseX < termopan.getX() + Termopan.bitmap.Width && mouseX + cursor_bitmap.Width > termopan.getX() && mouseY < termopan.getY() + Termopan.bitmap.Height && mouseY + cursor_bitmap.Height > termopan.getY()))
             {
                 // Intersection detected
                 
                 if (MouseManager.MouseState == MouseState.Right)
                 {
-                    termopanX = mouseX;
-                    termopanY = mouseY;
+                    mouseX = Math.Clamp((int)MouseManager.X, 0, (int)(MouseManager.ScreenWidth - Termopan.bitmap.Width));
+                    mouseY = Math.Clamp((int)MouseManager.Y, 0, (int)(MouseManager.ScreenHeight - Termopan.bitmap.Height));
+
+                    termopan.setPos(mouseX, mouseY);
                 }
                 
                 int cornerTolerance = 32; // Pixels area around the corner where the mouse is considered to intersect with the corner
-                int topRightCornerX = termopanX + (int)termopan_bitmap.Width - cornerTolerance; // X coordinate of the top-right corner area
-                int topRightCornerY = termopanY; // Y coordinate of the top-right corner
+                int topRightCornerX = termopan.getX() + (int)Termopan.bitmap.Width - cornerTolerance; // X coordinate of the top-right corner area
+                int topRightCornerY = termopan.getY(); // Y coordinate of the top-right corner
                 // Check if the mouse position is within the corner tolerance area
-                if (mouseX >= topRightCornerX && mouseX <= termopanX + termopan_bitmap.Width && mouseY >= topRightCornerY && mouseY <= topRightCornerY + cornerTolerance)
+                if (mouseX >= topRightCornerX && mouseX <= termopan.getX() + Termopan.bitmap.Width && mouseY >= topRightCornerY && mouseY <= topRightCornerY + cornerTolerance)
                 {
                     if (MouseManager.MouseState == MouseState.Left)
                     {
                         System.Console.Beep();
-                        isTermopanOpen = false;
+                        termopan.close();
                     }
                     
                 }
@@ -97,13 +103,15 @@ namespace sexOSRepo.Graphics
                 }
                 else if(key.Key == ConsoleKeyEx.N)
                 {
-                    isTermopanOpen = true;
+                    termopan.open();
                 }
             }
 
             // Display the updated canvas
             Heap.Collect();
             canvas.Display();
+
+
         }
 
     }
