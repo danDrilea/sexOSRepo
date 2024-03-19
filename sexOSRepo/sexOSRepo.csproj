@@ -2433,6 +2433,7 @@
       <None Remove="badAppleBMP\raton.bmp" />
       <None Remove="badAppleBMP\raton_1024x768.bmp" />
       <None Remove="badAppleBMP\retard.txt" />
+      <None Remove="badAppleBMP\termopan.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -2715,6 +2716,8 @@
       <EmbeddedResource Include="badAppleBMP\frame_0276.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0277.bmp" />
       <EmbeddedResource Include="badAppleBMP\raton_1024x768.bmp" />
+      <EmbeddedResource Include="badAppleBMP\retard.txt" />
+      <EmbeddedResource Include="badAppleBMP\termopan.bmp" />
     </ItemGroup>
 
     <ItemGroup>
