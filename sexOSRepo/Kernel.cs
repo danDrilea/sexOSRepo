@@ -22,7 +22,6 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
         public static badApple badapple;
         public static imageGUI imagegui;
 
-        //imi bag pula in ea de viata
         protected override void BeforeRun()
         {
             this.vfs = new CosmosVFS();//register vfs
@@ -33,7 +32,6 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
             Console.Write("sexOS successfully booted!\n");
         }
 
-        ///Intro song functions
         protected override void Run()
         {
             //gui

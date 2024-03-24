@@ -1,6 +1,7 @@
 ﻿using Cosmos.Core.Memory;
 using Cosmos.System;
 using Cosmos.System.Graphics;
+using Cosmos.System.Graphics.Fonts;
 using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,9 @@ namespace sexOSRepo.Graphics
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.cursor.bmp")] public static byte[] cursor_image;
         public static Bitmap cursor_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//background
 
+        [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.TASKBAR.bmp")] public static byte[] taskbar_image;
+        public static Bitmap taskbar_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//taskbar
+
         public static Canvas canvas;
         public imageGUI() 
         {
@@ -38,19 +42,34 @@ namespace sexOSRepo.Graphics
             canvas.Clear(Color.White);
             image_bitmap = new Bitmap(test_image, ColorOrder.BGR);
             cursor_bitmap = new Bitmap(cursor_image, ColorOrder.BGR);
+            taskbar_bitmap = new Bitmap(taskbar_image, ColorOrder.BGR);
 
             termopan = new Termopan();
         }
-
+        public void DrawText(string text, int x, int y, Color color)
+        {
+            // Check if the Canvas supports DrawString directly
+            if (canvas != null)
+            {
+                // Set the font and color for the text
+                // Note: The actual implementation might differ based on the Cosmos OS version and your project setup
+                // var font =font(; // Example font, adjust as necessary
+                var font = Cosmos.System.Graphics.Fonts.PCScreenFont.Default;
+                canvas.DrawString(text, font, new Pen(color), x, y);
+            }
+        }
         public void handleImageGUIinput()
         {
             // Ensure the background is redrawn every frame
             canvas.DrawImage(image_bitmap, 0, 0);
-
-            
+            var currentTime = DateTime.Now; // Note: This gets the system time; ensure your system clock is set correctly.
+            string timeString = currentTime.ToString("HH:mm:ss");//HOUR STRING!!
+            string dateString = currentTime.ToString("yyyy-MM-dd"); // Date string
+            canvas.DrawImageAlpha(taskbar_bitmap, 0, 733);//768 - cv
+            DrawText(timeString, 950, 737, Color.Black);//ora!!
+            DrawText(dateString, 940, 752, Color.Black);//data
             // Assuming termopanX and termopanY are defined elsewhere in your class
             if (termopan.isOpen())
-
             canvas.DrawImage(Termopan.bitmap, termopan.getX(), termopan.getY());
 
             // Clamp MouseManager.X and MouseManager.Y within the screen boundaries
@@ -64,15 +83,19 @@ namespace sexOSRepo.Graphics
             if(termopan.isOpen() && (mouseX < termopan.getX() + Termopan.bitmap.Width && mouseX + cursor_bitmap.Width > termopan.getX() && mouseY < termopan.getY() + Termopan.bitmap.Height && mouseY + cursor_bitmap.Height > termopan.getY()))
             {
                 // Intersection detected
-                
                 if (MouseManager.MouseState == MouseState.Right)
                 {
-                    mouseX = Math.Clamp((int)MouseManager.X, 0, (int)(MouseManager.ScreenWidth - Termopan.bitmap.Width));
-                    mouseY = Math.Clamp((int)MouseManager.Y, 0, (int)(MouseManager.ScreenHeight - Termopan.bitmap.Height));
+                    // Calculate the new intended position for termopan
+                    int intendedX = mouseX - (int)(Termopan.bitmap.Width / 2);
+                    int intendedY = mouseY - (int)(Termopan.bitmap.Height / 2);
 
-                    termopan.setPos(mouseX, mouseY);
+                    // Clamp the new position to ensure termopan stays within screen boundaries
+                    int clampedX = (int)(Math.Clamp(intendedX, 0, MouseManager.ScreenWidth - Termopan.bitmap.Width));
+                    int clampedY = (int)(Math.Clamp(intendedY, 0, MouseManager.ScreenHeight - Termopan.bitmap.Height));
+
+                    // Set the clamped position
+                    termopan.setPos(clampedX, clampedY);
                 }
-                
                 int cornerTolerance = 32; // Pixels area around the corner where the mouse is considered to intersect with the corner
                 int topRightCornerX = termopan.getX() + (int)Termopan.bitmap.Width - cornerTolerance; // X coordinate of the top-right corner area
                 int topRightCornerY = termopan.getY(); // Y coordinate of the top-right corner
