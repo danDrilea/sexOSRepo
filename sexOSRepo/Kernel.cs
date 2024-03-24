@@ -104,6 +104,7 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
         }
         private void HandleConsoleInput()
         {
+            Console.Write(File.currentDirectory + ">");
             String input = Console.ReadLine();
             string response = this.commandManager.processInput(input);
             Console.WriteLine(response);

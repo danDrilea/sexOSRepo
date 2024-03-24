@@ -13,7 +13,7 @@ namespace sexOSKernel.Commands
 {
     public class File : Command
     {
-        private string currentDirectory = @"0:\"; // Initialize the current directory as root.
+        public static string currentDirectory = @"0:\"; // Initialize the current directory as root.
 
         public File(string name, string description) : base(name, description) { }
 
