@@ -1,25 +1,18 @@
-﻿using Cosmos.Core.Memory;
+﻿using Cosmos.Core.IOGroup;
+using Cosmos.Core.Memory;
 using Cosmos.System;
 using Cosmos.System.Graphics;
-using Cosmos.System.Graphics.Fonts;
 using IL2CPU.API.Attribs;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using GraphicPoint = Cosmos.System.Graphics.Point;
 
 namespace sexOSRepo.Graphics
 {
     public class imageGUI
     {
         public bool shouldExitImageGUI { get; private set; } = false;
-
-        Termopan termopan;
+        public int open_Termopane_Index = -1;
 
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.raton_1024x768.bmp")] public static byte[] test_image;
         public static Bitmap image_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//background
@@ -30,9 +23,9 @@ namespace sexOSRepo.Graphics
 
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.TASKBAR.bmp")] public static byte[] taskbar_image;
         public static Bitmap taskbar_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//taskbar
-
+        public List<Termopan> termopane = new List<Termopan>();
         public static Canvas canvas;
-        public imageGUI() 
+        public imageGUI()
         {
             MouseManager.ScreenWidth = 1024;
             MouseManager.ScreenHeight = 768;
@@ -44,7 +37,6 @@ namespace sexOSRepo.Graphics
             cursor_bitmap = new Bitmap(cursor_image, ColorOrder.BGR);
             taskbar_bitmap = new Bitmap(taskbar_image, ColorOrder.BGR);
 
-            termopan = new Termopan();
         }
         public void DrawText(string text, int x, int y, Color color)
         {
@@ -68,53 +60,13 @@ namespace sexOSRepo.Graphics
             canvas.DrawImageAlpha(taskbar_bitmap, 0, 733);//768 - cv
             DrawText(timeString, 950, 737, Color.Black);//ora!!
             DrawText(dateString, 940, 752, Color.Black);//data
-            // Assuming termopanX and termopanY are defined elsewhere in your class
-            if (termopan.isOpen())
-            canvas.DrawImage(Termopan.bitmap, termopan.getX(), termopan.getY());
-
-            // Clamp MouseManager.X and MouseManager.Y within the screen boundaries
             int mouseX = Math.Clamp((int)MouseManager.X, 0, (int)(MouseManager.ScreenWidth - cursor_bitmap.Width + 15));
             int mouseY = Math.Clamp((int)MouseManager.Y, 0, (int)(MouseManager.ScreenHeight - cursor_bitmap.Height + 15));
+            // Assuming termopanX and termopanY are defined elsewhere in your class
 
-            // Draw the mouse cursor at the clamped position
+
+            HandleTermopanMovement(mouseX, mouseY);
             canvas.DrawImageAlpha(cursor_bitmap, mouseX, mouseY);
-
-            // Check if the mouse cursor intersects with the termopan
-            if(termopan.isOpen() && (mouseX < termopan.getX() + Termopan.bitmap.Width && mouseX + cursor_bitmap.Width > termopan.getX() && mouseY < termopan.getY() + Termopan.bitmap.Height && mouseY + cursor_bitmap.Height > termopan.getY()))
-            {
-                // Intersection detected
-                if (MouseManager.MouseState == MouseState.Right)
-                {
-                    // Calculate the new intended position for termopan
-                    int intendedX = mouseX - (int)(Termopan.bitmap.Width / 2);
-                    int intendedY = mouseY - (int)(Termopan.bitmap.Height / 2);
-
-                    // Clamp the new position to ensure termopan stays within screen boundaries
-                    int clampedX = (int)(Math.Clamp(intendedX, 0, MouseManager.ScreenWidth - Termopan.bitmap.Width));
-                    int clampedY = (int)(Math.Clamp(intendedY, 0, MouseManager.ScreenHeight - Termopan.bitmap.Height));
-
-                    // Set the clamped position
-                    termopan.setPos(clampedX, clampedY);
-                }
-                int cornerTolerance = 32; // Pixels area around the corner where the mouse is considered to intersect with the corner
-                int topRightCornerX = termopan.getX() + (int)Termopan.bitmap.Width - cornerTolerance; // X coordinate of the top-right corner area
-                int topRightCornerY = termopan.getY(); // Y coordinate of the top-right corner
-                // Check if the mouse position is within the corner tolerance area
-                if (mouseX >= topRightCornerX && mouseX <= termopan.getX() + Termopan.bitmap.Width && mouseY >= topRightCornerY && mouseY <= topRightCornerY + cornerTolerance)
-                {
-                    if (MouseManager.MouseState == MouseState.Left)
-                    {
-                        System.Console.Beep();
-                        termopan.close();
-                    }
-                    
-                }
-                else if (MouseManager.MouseState == MouseState.Left)
-                {
-                    System.Console.Beep();
-                }
-
-            }
 
             // Keyboard handling
             if (KeyboardManager.KeyAvailable)
@@ -124,18 +76,57 @@ namespace sexOSRepo.Graphics
                 {
                     shouldExitImageGUI = true;
                 }
-                else if(key.Key == ConsoleKeyEx.N)
+                else if (key.Key == ConsoleKeyEx.N)
                 {
-                    termopan.open();
+                    open_Termopane_Index++;
+                    termopane.Add(new Termopan());
+                    termopane[open_Termopane_Index].Open();
                 }
             }
 
-            // Display the updated canvas
             Heap.Collect();
             canvas.Display();
 
-
         }
+
+        public void HandleTermopanMovement(int mouseX, int mouseY)
+        {
+            Termopan topmostInteractedTermopan = null;
+
+            // Iterate through termopane in reverse order to check the topmost termopan first
+            for (int i = termopane.Count - 1; i >= 0; i--)
+            {
+                Termopan t = termopane[i];
+                if (t.IsOpen() && t.HandleInteraction(mouseX, mouseY, MouseManager.MouseState))
+                {
+                    // If an interaction is detected, break the loop as we only want to interact with the topmost termopan
+                    topmostInteractedTermopan = t;
+                    break;
+                }
+            }
+
+            // If a termopan was interacted with, move it to the end of the list to make it the topmost
+            if (topmostInteractedTermopan != null)
+            {
+                termopane.Remove(topmostInteractedTermopan);
+                termopane.Add(topmostInteractedTermopan);
+
+                // Redraw or update the GUI as necessary to reflect the new z-index
+                // This might involve reordering how termopans are drawn or updating the canvas
+            }
+
+            // Optionally, redraw all Termopans in their new order to reflect the z-index change
+            // This could be placed here or handled separately depending on your rendering logic
+            foreach (Termopan t in termopane)
+            {
+                if (t.IsOpen())
+                {
+                    // Draw the termopan on the canvas
+                    canvas.DrawImage(Termopan.bitmap, t.GetX(), t.GetY());
+                }
+            }
+        }
+
 
     }
 }
