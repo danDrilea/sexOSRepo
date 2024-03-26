@@ -24,6 +24,8 @@ namespace sexOSKernel.Commands
             this.commands.Add(new launchGUI("draw", "DRAW! Press S to save, L to load and ESC to exit!"));
             this.commands.Add(new launchBadApple("badApple", "plays the Bad Apple animation!"));
             this.commands.Add(new launchImageGUI("imageGUI", "Starts a GUI with images."));
+            this.commands.Add(new launchGameOfLife("life", "Starts Conway's Game Of Life Simulation - Press r for random or Enter for preset patterns!"));
+
         }
 
         public String processInput(String input)

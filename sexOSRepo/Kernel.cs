@@ -21,6 +21,7 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
         public static GUI gui;
         public static badApple badapple;
         public static imageGUI imagegui;
+        public static gameOfLife gameoflife;
 
         protected override void BeforeRun()
         {
@@ -64,6 +65,15 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 ExitImageGUIMode();
                 imagegui = null;
             }
+            else if (gameoflife != null && !gameoflife.ShouldExitGameOfLife)
+            {
+                gameoflife.handleGameOfLifeInputs();
+            }
+            else if (gameoflife != null && gameoflife.ShouldExitGameOfLife)
+            {
+                ExitGameOfLife();
+                gameoflife = null;
+            }
             else
             {
                 // Handle console input/output as before
@@ -102,6 +112,19 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
 
             // Re-enable console input if it was disabled during GUI mode
         }
+
+        private void ExitGameOfLife()
+        {
+            // Clear the GUI canvas or disable graphics mode as necessary
+            gameOfLife.canvas.Disable(); // This is conceptual; actual method to disable canvas or graphics mode may vary
+
+            // Potentially clear the console and reset any needed console settings
+            Console.Clear();
+            Console.WriteLine("Back to console mode.");
+
+            // Re-enable console input if it was disabled during GUI mode
+        }
+
         private void HandleConsoleInput()
         {
             Console.Write(File.currentDirectory + ">");
