@@ -1,13 +1,9 @@
-﻿using Cosmos.System.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using Sys = Cosmos.System;
+﻿using Cosmos.System.FileSystem;
 using sexOSKernel.Commands;
-using Cosmos.System.FileSystem;
 using sexOSKernel.Graphics;
 using sexOSRepo.Graphics;
+using System;
+using Sys = Cosmos.System;
 
 namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
 {
@@ -17,10 +13,21 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
     {
         public CosmosVFS vfs;//file system class
         private CommandManager commandManager;
+        public enum Mode
+        {
+            Console,
+            Paint,
+            BadApple,
+            Desktop,
+            GameOfLife
+        }
 
-        public static GUI gui;
+        public static Mode currentMode = Mode.Console;
+
+        public static paint paint;
         public static badApple badapple;
-        public static imageGUI imagegui;
+        public static desktop desktop;
+        public static gameOfLife gameoflife;
 
         protected override void BeforeRun()
         {
@@ -28,88 +35,80 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
             Sys.FileSystem.VFS.VFSManager.RegisterVFS(this.vfs);
             this.commandManager = new CommandManager();//adauga comenzile ca sa fie recunoscute in scope
 
+            Console.Clear();
             Console.Write("                ___  ____  \r\n ___  _____  __/ _ \\/ ___| \r\n/ __|/ _ \\ \\/ / | | \\___ \\ \r\n\\__ \\  __/>  <| |_| |___) |\r\n|___/\\___/_/\\_\\\\___/|____/ \n");
             Console.Write("sexOS successfully booted!\n");
         }
 
         protected override void Run()
         {
-            //gui
-            if (gui != null && !gui.ShouldExitGUI)
+            switch (currentMode)
             {
-                gui.handleGUIInputs();
-            }
-            else if (gui != null && gui.ShouldExitGUI)
-            {
-                // Exit GUI mode
-                ExitGUIMode(); // You need to define this method
-                gui = null; // Reset GUI to null if you're done with it
-            }
-            else if (badapple != null && !badapple.ShouldExitApple)
-            {
-                badapple.handleAppleInputs();
-            }
-            else if (badapple != null && badapple.ShouldExitApple)
-            {
-                // Exit Apple mode
-                ExitBadAppleMode();
-                badapple = null; // Reset GUI to null if you're done with it
-            }
-            else if(imagegui != null && !imagegui.shouldExitImageGUI)
-            {
-                    imagegui.handleImageGUIinput();
-            }
-            else if(imagegui != null && imagegui.shouldExitImageGUI)
-            {
-                ExitImageGUIMode();
-                imagegui = null;
-            }
-            else
-            {
-                // Handle console input/output as before
-                HandleConsoleInput();
+                case Mode.Paint:
+                    paint.handlePaintInputs();
+                    break;
+                case Mode.BadApple:
+                    badapple.handleAppleInputs();
+                    break;
+                case Mode.Desktop:
+                    desktop.handledesktopinput();
+                    break;
+                case Mode.GameOfLife:
+                    gameoflife.handleGameOfLifeInputs();
+                    break;
+                case Mode.Console:
+                default:
+                    Console.Write(File.currentDirectory + ">");
+                    string input = Console.ReadLine();
+                    string response = commandManager.processInput(input);
+                    Console.WriteLine(response);
+                    break;
             }
 
+            if(paint != null && paint.ShouldExitPaint)
+                exitMode(Mode.Paint);
+            if(badapple != null && badapple.ShouldExitApple)
+                exitMode(Mode.BadApple);
+            if(desktop != null && desktop.shouldExitdesktop)
+                exitMode(Mode.Desktop);
+            if(gameoflife != null && gameoflife.ShouldExitGameOfLife)
+                exitMode(Mode.GameOfLife);
+
+            if(currentMode == Mode.Console)
+            {
+                Console.Write(File.currentDirectory + ">");
+                string input = Console.ReadLine();
+                string response = commandManager.processInput(input);
+                Console.WriteLine(response);
+            }
         }
 
-        private void ExitBadAppleMode()
+        private void exitMode(Mode mode)
         {
-            // Clear the GUI canvas or disable graphics mode as necessary
-            badApple.canvas.Disable(); // This is conceptual; actual method to disable canvas or graphics mode may vary
+            switch (mode)
+            {
+                case Mode.Paint:
+                    paint.canvas.Disable();
+                    paint = null;
+                    break;
+                case Mode.BadApple:
+                    badApple.canvas.Disable();
+                    badapple= null;
+                    break;
+                case Mode.Desktop:
+                    desktop.canvas.Disable();
+                    desktop = null;
+                    break;
+                case Mode.GameOfLife:
+                    gameOfLife.canvas.Disable();
+                    gameoflife= null;
+                    break;
+            }
+            currentMode = Mode.Console;
 
-            // Potentially clear the console and reset any needed console settings
             Console.Clear();
-            Console.WriteLine("Back to console mode.");
-
-            // Re-enable console input if it was disabled during GUI mode
+            Console.WriteLine("Welcome back to sexOS!");
         }
-        private void ExitImageGUIMode()
-        {
-            // Potentially clear the console and reset any needed console settings
-            Console.Clear();
-            Console.WriteLine("Back to console mode.");
-            imageGUI.canvas.Disable();
-            // Re-enable console input if it was disabled during GUI mode
-        }
-        private void ExitGUIMode()
-        {
-            // Clear the GUI canvas or disable graphics mode as necessary
-            GUI.canvas.Disable(); // This is conceptual; actual method to disable canvas or graphics mode may vary
-
-            // Potentially clear the console and reset any needed console settings
-            Console.Clear();
-            Console.WriteLine("Back to console mode.");
-
-            // Re-enable console input if it was disabled during GUI mode
-        }
-        private void HandleConsoleInput()
-        {
-            Console.Write(File.currentDirectory + ">");
-            String input = Console.ReadLine();
-            string response = this.commandManager.processInput(input);
-            Console.WriteLine(response);
-        }
-
 
     }
 

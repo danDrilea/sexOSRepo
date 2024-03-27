@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using sexOSKernel.Graphics;
+﻿using sexOSKernel.Graphics;
+using System;
 
 namespace sexOSKernel.Commands
 {
@@ -15,6 +13,7 @@ namespace sexOSKernel.Commands
                 return "BadApple already launched!";
 
             Kernel.badapple = new badApple();
+            Kernel.currentMode = Kernel.Mode.BadApple;
 
             return "Launched badApple!";
         }
