@@ -100,46 +100,35 @@ namespace sexOSRepo.Graphics
             return interacted;
         }
 
-
-
-
-
         public void Close()
         {
             isOpen = false;
         }
-
         public void Open()
         {
             isOpen = true;
         }
-
         public bool IsOpen()
         {
             return isOpen;
         }
-
         public void SetPos(int x, int y)
         {
             this.x = x;
             this.y = y;
         }
-
         public int GetX()
         {
             return x;
         }
-
         public int GetY()
         {
             return y;
         }
-
         public int GetHeight()
         {
             return height;
         }
-
         public int GetWidth()
         {
             return width;
