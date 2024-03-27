@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using sexOSKernel.Graphics;
+﻿using sexOSKernel.Graphics;
+using System;
 
 namespace sexOSKernel.Commands
 {
@@ -15,6 +13,7 @@ namespace sexOSKernel.Commands
                 return "GameOfLife already launched!";
 
             Kernel.gameoflife = new gameOfLife();
+            Kernel.currentMode = Kernel.Mode.GameOfLife;
 
             return "Launched GameOfLife!";
         }

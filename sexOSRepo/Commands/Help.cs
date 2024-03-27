@@ -17,7 +17,7 @@ namespace sexOSKernel.Commands
             // List all command names
             foreach (Command cmd in commands)
             {
-                commandList += "\n- " + cmd.name + "  -" + cmd.description; //am adaugat si o descriere pentru fiecare comanda
+                commandList += "\n" + cmd.name + "-" + cmd.description; //am adaugat si o descriere pentru fiecare comanda
             }
 
             return commandList;

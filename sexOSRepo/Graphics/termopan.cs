@@ -1,9 +1,7 @@
 ﻿using Cosmos.System;
 using Cosmos.System.Graphics;
 using IL2CPU.API.Attribs;
-using sexOSKernel.Graphics;
 using System;
-using System.Drawing;
 
 namespace sexOSRepo.Graphics
 {

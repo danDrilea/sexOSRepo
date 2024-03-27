@@ -1,19 +1,9 @@
 ﻿using Cosmos.System;
-using Cosmos.System.FileSystem;
 using Cosmos.System.Graphics;
-using sexOSKernel.Commands;
-using System;
-using System.Drawing;
-using Sys = Cosmos.System;
-using Console = System.Console;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
 using IL2CPU.API.Attribs;
-using System.IO;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Threading;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace sexOSKernel.Graphics
 {
@@ -578,7 +568,7 @@ namespace sexOSKernel.Graphics
 
         public static Bitmap image_bitmap = new Bitmap(192, 144, ColorDepth.ColorDepth32);//background
 
-        List<byte[]> images= new List<byte[]>();
+        List<byte[]> images = new List<byte[]>();
 
         public static Canvas canvas;
 

@@ -1,6 +1,5 @@
 ﻿using Cosmos.Core.Memory;
 using Cosmos.System;
-using Cosmos.System.FileSystem;
 using Cosmos.System.Graphics;
 using System;
 using System.Collections.Generic;
@@ -9,9 +8,9 @@ using Sys = Cosmos.System;
 
 namespace sexOSKernel.Graphics
 {
-    public class GUI
+    public class paint
     {
-        public bool ShouldExitGUI { get; private set; } = false;
+        public bool ShouldExitPaint { get; private set; } = false;
         public static Canvas canvas;
         private Pen pen;
         private Pen termopanPen;
@@ -20,7 +19,7 @@ namespace sexOSKernel.Graphics
         private Color lastMousePositionColor = Color.White; // The background color
         private int rows, cols;
 
-        public GUI() //constructor
+        public paint() //constructor
         {
             // Attempt to create a canvas with a resolution of 400x300
             canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
@@ -50,7 +49,7 @@ namespace sexOSKernel.Graphics
             canvas.DrawRectangle(saveAreaPen, 0, 0, 800, 600);
         }
 
-        public void handleGUIInputs()
+        public void handlePaintInputs()
         {
             var mousePosition = GetMousePosition();
 
@@ -58,7 +57,7 @@ namespace sexOSKernel.Graphics
             {
                 DrawOnClick(mousePosition);
             }
-            else if(MouseManager.MouseState == MouseState.Right)
+            else if (MouseManager.MouseState == MouseState.Right)
             {
                 EraserClick(mousePosition);
             }
@@ -72,7 +71,7 @@ namespace sexOSKernel.Graphics
                 var key = KeyboardManager.ReadKey();
                 if (key.Key == ConsoleKeyEx.Escape)
                 {
-                    ShouldExitGUI = true;
+                    ShouldExitPaint = true;
                 }
                 if (key.Key == ConsoleKeyEx.S) // Trigger save on 'S' key press
                 {
@@ -167,7 +166,7 @@ namespace sexOSKernel.Graphics
             {
                 if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Escape)
                 {
-                    ShouldExitGUI = true;
+                    ShouldExitPaint = true;
                 }
             }
         }

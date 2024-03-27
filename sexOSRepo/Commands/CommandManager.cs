@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using sexOSKernel.Commands;
 namespace sexOSKernel.Commands
 {
 
@@ -17,14 +16,14 @@ namespace sexOSKernel.Commands
             this.commands = new List<Command>();//in paranteza se afla numarul de comenzi, pot sa l las asa
             //dar e good practice sa scriu cate sunt ca sa 
             //adaug la lista de comenzi comenzi xd
-            this.commands.Add(new Help("help","Lists commands and their descriptions", this.commands));
-            this.commands.Add(new FuckCommand("fuck", "Plays a song"));
+            this.commands.Add(new Help("help", "Lists commands and their descriptions", this.commands));
+            this.commands.Add(new Sing("fuck", "Plays a song"));
             this.commands.Add(new ClearScreen("clear", "Clears the screen"));
             this.commands.Add(new File("file", "File System Operations. Type the argument 'help' for the manual."));
-            this.commands.Add(new launchGUI("draw", "DRAW! Press S to save, L to load and ESC to exit!"));
+            this.commands.Add(new launchPaint("draw", "DRAW! Press S to save, L to load and ESC to exit!"));
             this.commands.Add(new launchBadApple("badApple", "plays the Bad Apple animation!"));
-            this.commands.Add(new launchImageGUI("imageGUI", "Starts a GUI with images."));
-            this.commands.Add(new launchGameOfLife("life", "Starts Conway's Game Of Life Simulation - Press r for random or Enter for preset patterns!"));
+            this.commands.Add(new launchDesktop("desktop", "Starts a GUI with images."));
+            this.commands.Add(new launchGameOfLife("life", "Starts Conway's Game Of Life Simulation - Press R for random or L for preset patterns! or C for clear"));
 
         }
 

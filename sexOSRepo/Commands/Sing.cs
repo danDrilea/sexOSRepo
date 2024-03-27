@@ -2,9 +2,9 @@
 
 namespace sexOSKernel.Commands
 {
-    public class FuckCommand : Command
+    public class Sing : Command
     {
-        public FuckCommand(String name, String description) : base(name, description) { }
+        public Sing(String name, String description) : base(name, description) { }
         public override string Execute(string[] args)
         {
             PlaySong();

@@ -1,23 +1,11 @@
-﻿using Cosmos.System;
-using Cosmos.System.FileSystem;
+﻿using Cosmos.Core.Memory;
+using Cosmos.System;
 using Cosmos.System.Graphics;
-using sexOSKernel.Commands;
 using System;
-using System.Drawing;
-using Sys = Cosmos.System;
-using Console = System.Console;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
-using IL2CPU.API.Attribs;
-using System.IO;
-using System.Reflection;
-using System.Threading;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Numerics;
-using Cosmos.Core.Memory;
-using sexOSRepo.Graphics;
-using System.Data;
+using System.Drawing;
+using Console = System.Console;
+using Sys = Cosmos.System;
 
 namespace sexOSKernel.Graphics
 {
@@ -32,7 +20,7 @@ namespace sexOSKernel.Graphics
             public Pattern(int x, int y, string RLE)
             {
                 this.x = x;
-                this.y = y; 
+                this.y = y;
                 this.RLE = RLE;
             }
         }
@@ -208,7 +196,7 @@ namespace sexOSKernel.Graphics
         {
             drawGrid();
 
-            if(!isPaused)
+            if (!isPaused)
                 updateGrid();
 
             if (KeyboardManager.KeyAvailable)

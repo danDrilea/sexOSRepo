@@ -1,5 +1,4 @@
-﻿using Cosmos.Core.IOGroup;
-using Cosmos.Core.Memory;
+﻿using Cosmos.Core.Memory;
 using Cosmos.System;
 using Cosmos.System.Graphics;
 using IL2CPU.API.Attribs;
@@ -9,9 +8,9 @@ using System.Drawing;
 
 namespace sexOSRepo.Graphics
 {
-    public class imageGUI
+    public class desktop
     {
-        public bool shouldExitImageGUI { get; private set; } = false;
+        public bool shouldExitdesktop { get; private set; } = false;
         public int open_Termopane_Index = -1;
 
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.raton_1024x768.bmp")] public static byte[] test_image;
@@ -25,7 +24,7 @@ namespace sexOSRepo.Graphics
         public static Bitmap taskbar_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//taskbar
         public List<Termopan> termopane = new List<Termopan>();
         public static Canvas canvas;
-        public imageGUI()
+        public desktop()
         {
             MouseManager.ScreenWidth = 1024;
             MouseManager.ScreenHeight = 768;
@@ -50,7 +49,7 @@ namespace sexOSRepo.Graphics
                 canvas.DrawString(text, font, new Pen(color), x, y);
             }
         }
-        public void handleImageGUIinput()
+        public void handledesktopinput()
         {
             // Ensure the background is redrawn every frame
             canvas.DrawImage(image_bitmap, 0, 0);
@@ -74,7 +73,7 @@ namespace sexOSRepo.Graphics
                 var key = KeyboardManager.ReadKey();
                 if (key.Key == ConsoleKeyEx.Escape)
                 {
-                    shouldExitImageGUI = true;
+                    shouldExitdesktop = true;
                 }
                 else if (key.Key == ConsoleKeyEx.N)
                 {

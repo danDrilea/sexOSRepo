@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Cosmos.System.FileSystem.VFS;
+using System;
 using System.IO;
+using System.Text;
 using Sys = Cosmos.System;
-using Cosmos.System.FileSystem;
-using Cosmos.System.FileSystem.VFS;
-using Microsoft.VisualBasic;
 
 namespace sexOSKernel.Commands
 {
@@ -24,17 +19,17 @@ namespace sexOSKernel.Commands
             {
                 case "help"://ar fi mai ok sa avem aici help
                     response = "- create: New file at path. Usage: file create PATH\\NAME.EXT\n" +
-            "- delete: Remove file at path. Usage: file delete PATH\\NAME\n" +
-            "- createdir: New directory at path. Usage: file createdir PATH\n" +
-            "- removedir: Delete directory at path. Usage: file removedir PATH\n" +
-            "- writestring: Write text to file. Usage: file writestring PATH\\NAME TEXT\n" +
-            "- readstring: Read file content. Usage: file readstring PATH\n" +
-            "- listdir: List path contents. Usage: file listdir PATH\n" +
-            "- mv: Move file/directory. Usage: file mv SOURCE DEST\n" +
-            "- cp: Copy file/directory. Usage: file cp SOURCE DEST\n" +
-            "- cd: Change directory. Usage: file cd PATH\n" +
-            "- pwd: Show current directory. Usage: file pwd\n" +
-            "- tree: Display directory tree. Usage: file tree [PATH]\n";
+            "delete: Remove file at path. Usage: file delete PATH\\NAME\n" +
+            "createdir: New directory at path. Usage: file createdir PATH\n" +
+            "removedir: Delete directory at path. Usage: file removedir PATH\n" +
+            "writestring: Write text to file. Usage: file writestring PATH\\NAME TEXT\n" +
+            "readstring: Read file content. Usage: file readstring PATH\n" +
+            "listdir: List path contents. Usage: file listdir PATH\n" +
+            "mv: Move file/directory. Usage: file mv SOURCE DEST\n" +
+            "cp: Copy file/directory. Usage: file cp SOURCE DEST\n" +
+            "cd: Change directory. Usage: file cd PATH\n" +
+            "pwd: Show current directory. Usage: file pwd\n" +
+            "tree: Display directory tree. Usage: file tree [PATH]\n";
 
                     break;
                 case "pwd":
@@ -158,7 +153,7 @@ namespace sexOSKernel.Commands
                         response = ex.ToString();
                     }
                     break;
-                   case "writestring": //file writestring 0:\Myfile.txt "abcacaca"
+                case "writestring": //file writestring 0:\Myfile.txt "abcacaca"
                     try
                     {
                         FileStream fs = (FileStream)Sys.FileSystem.VFS.VFSManager.GetFile(Path.Combine(currentDirectory, args[1])).GetFileStream();
@@ -189,8 +184,8 @@ namespace sexOSKernel.Commands
                             response = "Unable to write to file, it is not open for writing.";
                         }
                     }
-                    catch(Exception ex)
-                    { 
+                    catch (Exception ex)
+                    {
                         response = ex.ToString();
                     }
                     break;
