@@ -18,9 +18,10 @@ namespace sexOSKernel.Graphics
         private Sys.Graphics.Point lastMousePosition = new Sys.Graphics.Point(-1, -1); // Initialize to an invalid position
         private Color lastMousePositionColor = Color.White; // The background color
         private int rows, cols;
-
         public paint() //constructor
         {
+            MouseManager.X = 1024 / 2;
+            MouseManager.Y = 768 / 2;
             // Attempt to create a canvas with a resolution of 400x300
             canvas = FullScreenCanvas.GetFullScreenCanvas(new Mode(1024, 768, ColorDepth.ColorDepth32));
             canvas.Clear(Color.White);
@@ -114,7 +115,6 @@ namespace sexOSKernel.Graphics
                     fileStream.Write(pixelData, 0, pixelData.Length);
                 }
                 fileStream.Close(); // Always close the file stream after finishing
-                Heap.Collect();
             }
             catch (Exception e)
             {
@@ -137,7 +137,6 @@ namespace sexOSKernel.Graphics
                     // Read the pixel data from the file
                     fileStream.Read(pixelData, 0, pixelData.Length);
                     fileStream.Close(); // Close the file stream after reading
-                    Heap.Collect();
                     // Iterate through the pixel data and redraw the canvas based on the saved state
                     for (int y = 0; y < height; y++)
                     {

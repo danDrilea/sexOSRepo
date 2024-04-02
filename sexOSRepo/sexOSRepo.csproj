@@ -2434,9 +2434,17 @@
       <None Remove="badAppleBMP\raton_1024x768.bmp" />
       <None Remove="badAppleBMP\retard.txt" />
       <None Remove="badAppleBMP\termopan.bmp" />
+      <None Remove="GUIBMP\directory_image.bmp" />
+      <None Remove="GUIBMP\file_image.bmp" />
       <None Remove="GUIBMP\start-button.bmp" />
       <None Remove="GUIBMP\TASKBAR.bmp" />
+      <None Remove="GUIBMP\Taskbar_Icon.bmp" />
       <None Remove="GUIBMP\termopan-boop.bmp" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="GUIBMP\directory_image.bmp" />
+      <EmbeddedResource Include="GUIBMP\file_image.bmp" />
     </ItemGroup>
 
     <ItemGroup>
@@ -2721,6 +2729,7 @@
       <EmbeddedResource Include="GUIBMP\raton_1024x768.bmp" />
       <EmbeddedResource Include="GUIBMP\start-button.bmp" />
       <EmbeddedResource Include="GUIBMP\TASKBAR.bmp" />
+      <EmbeddedResource Include="GUIBMP\Taskbar_Icon.bmp" />
       <EmbeddedResource Include="GUIBMP\termopan-boop.bmp" />
       <EmbeddedResource Include="GUIBMP\termopan.bmp" />
     </ItemGroup>

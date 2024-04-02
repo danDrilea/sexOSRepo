@@ -1,6 +1,8 @@
 ﻿using Cosmos.System.FileSystem.VFS;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Sys = Cosmos.System;
 
@@ -29,7 +31,8 @@ namespace sexOSKernel.Commands
             "cp: Copy file/directory. Usage: file cp SOURCE DEST\n" +
             "cd: Change directory. Usage: file cd PATH\n" +
             "pwd: Show current directory. Usage: file pwd\n" +
-            "tree: Display directory tree. Usage: file tree [PATH]\n";
+            "tree: Display directory tree. Usage: file tree [PATH]\n" +
+            "finddir: Recursively finds directories or files. Usage: file finddir NAME\n";
 
                     break;
                 case "pwd":
@@ -128,7 +131,13 @@ namespace sexOSKernel.Commands
                         StringBuilder sb = new StringBuilder();
                         foreach (var dir in directories)
                         {
-                            sb.AppendLine(dir.mName + (string)" " + dir.mSize);
+                            
+                            if(dir.mEntryType == Sys.FileSystem.Listing.DirectoryEntryTypeEnum.Directory)
+                            {
+                                sb.AppendLine((string)"D-" + dir.mName + (string)" " + ( dir.mSize));
+                            }
+                            else sb.AppendLine((string)"-" + dir.mName + (string)" " + (dir.mSize));
+
                         }
                         response = sb.ToString();
                     }
@@ -224,12 +233,88 @@ namespace sexOSKernel.Commands
                         response = MoveFile(sourcePath, destinationPath);
                     }
                     break;
+
+                case "finddir":
+                    if (args.Length < 2)
+                    {
+                        response = "Error: No directory name specified.";
+                    }
+                    else
+                    {
+                        string searchName = args[1];
+                        string searchPath = currentDirectory;
+                        if (args.Length > 2) // If a path is provided
+                        {
+                            searchPath = Path.Combine(currentDirectory, args[2]);
+                        }
+
+                        if (!Directory.Exists(searchPath))
+                        {
+                            response = $"Error: Search path does not exist - {searchPath}";
+                            break;
+                        }
+
+                        try
+                        {
+                            List<string> foundPaths = new List<string>();
+                            SearchDirectoriesRecursively(searchPath, searchName, foundPaths);
+
+                            if (foundPaths.Any())
+                            {
+                                StringBuilder sb = new StringBuilder();
+                                sb.AppendLine($"Found directories matching '{searchName}':");
+                                foreach (var path in foundPaths)
+                                {
+                                    sb.AppendLine(path);
+                                }
+                                response = sb.ToString();
+                            }
+                            else
+                            {
+                                response = $"No directories found starting with '{searchName}' in path {searchPath}";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            response = $"Error searching directories: {ex.Message}";
+                        }
+                    }
+                    break;
                 default:
                     response = "Invalid input or command not implemented.";
                     break;
             }
             return response;
         }
+        private void SearchDirectoriesRecursively(string searchPath, string searchName, List<string> foundPaths)
+        {
+            try
+            {
+                // Get directories in the current directory
+                var directories = Sys.FileSystem.VFS.VFSManager.GetDirectoryListing(searchPath);
+
+                foreach (var dir in directories)
+                {
+                    // Check if directory name matches the search term
+                    if (dir.mName.StartsWith(searchName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        foundPaths.Add(Path.Combine(searchPath, dir.mName));
+                    }
+
+                    // Recursively search in subdirectories
+                    if (dir.mEntryType == Sys.FileSystem.Listing.DirectoryEntryTypeEnum.Directory)
+                    {
+                        SearchDirectoriesRecursively(Path.Combine(searchPath, dir.mName), searchName, foundPaths);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during the search
+                Console.WriteLine($"Error during recursive search: {ex.Message}");
+            }
+        }
+
         private string ReadStringFromFile(string filePath)
         {
             try
