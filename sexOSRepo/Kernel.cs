@@ -20,6 +20,8 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
             BadApple,
             Desktop,
             GameOfLife,
+            Snake
+            GameOfLife,
             Piano
         }
 
@@ -29,6 +31,7 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
         public static badApple badapple;
         public static desktop desktop;
         public static gameOfLife gameoflife;
+        public static snake snake;
         public static Piano piano;
 
         protected override void BeforeRun()
@@ -58,6 +61,9 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 case Mode.GameOfLife:
                     gameoflife.handleGameOfLifeInputs();
                     break;
+                case Mode.Snake:
+                    snake.handleSnakeInputs();
+                    break;
                 case Mode.Piano:
                     piano.HandlePianoInputs();
                     break;
@@ -78,6 +84,8 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 exitMode(Mode.Desktop);
             if(gameoflife != null && gameoflife.ShouldExitGameOfLife)
                 exitMode(Mode.GameOfLife);
+            if(snake != null && snake.ShouldExitSnake)
+                exitMode(Mode.Snake);
             if(piano != null && piano.ShouldExitPiano)
                 exitMode(Mode.Piano);
 
@@ -109,6 +117,10 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 case Mode.GameOfLife:
                     gameOfLife.canvas.Disable();
                     gameoflife= null;
+                    break;
+                case Mode.Snake:
+                    snake.canvas.Disable();
+                    snake = null;
                     break;
                 case Mode.Piano:
                     Piano.canvas.Disable();
