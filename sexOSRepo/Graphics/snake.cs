@@ -22,7 +22,7 @@ namespace sexOSKernel.Graphics
 
         private const int Height = 768;
         private const int Width = 1024;
-        private const int pixelSize = 20;
+        private const int pixelSize = 30;
         private const int gridHeight = Height / pixelSize;
         private const int gridWidth = Width / pixelSize;
 
@@ -276,7 +276,7 @@ namespace sexOSKernel.Graphics
                 check_grow();
                 grid[HeadSnakeI][HeadSnakeJ] = (int)blockState.SnakeHead;
                 drawGrid();
-                Thread.Sleep(100);
+                Thread.Sleep(125);
             }
             else
                 game = false;
