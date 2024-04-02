@@ -13,6 +13,8 @@ namespace sexOSRepo.Graphics
     public class desktop
     {
         public bool shouldExitdesktop { get; private set; } = false;
+        public int open_Termopane_Index = -1;
+
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.raton_1024x768.bmp")] public static byte[] test_image;
         public static Bitmap image_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//background
 
@@ -55,7 +57,13 @@ namespace sexOSRepo.Graphics
         }
         public void DrawText(string text, int x, int y, Color color)
         {
-            var font = Cosmos.System.Graphics.Fonts.PCScreenFont.Default;
+            // Check if the Canvas supports DrawString directly
+            if (canvas != null)
+            {
+                // Set the font and color for the text
+                // Note: The actual implementation might differ based on the Cosmos OS version and your project setup
+                // var font =font(; // Example font, adjust as necessary
+                var font = Cosmos.System.Graphics.Fonts.PCScreenFont.Default;
             int maxWidth = 310; ; // The maximum width of the Termopan for text
             int charWidth = font.Width; // Width of a character; this is a simplification
             int charsPerLine = maxWidth / charWidth; // Max characters per line
@@ -72,10 +80,11 @@ namespace sexOSRepo.Graphics
             for (int lineIndex = 0; lineIndex < lines.Count; lineIndex++)
             {
                 canvas.DrawString(lines[lineIndex], font, new Pen(color), x, y + (lineHeight * lineIndex));
-            }
+        }
         }
         public void handledesktopinput()
         {
+            // Ensure the background is redrawn every frame
             canvas.DrawImage(image_bitmap, 0, 0);
             var currentTime = DateTime.Now;
             string timeString = currentTime.ToString("HH:mm:ss");
@@ -87,8 +96,13 @@ namespace sexOSRepo.Graphics
             DrawText(dateString, 940, 752, Color.Black);
             int mouseX = Math.Clamp((int)MouseManager.X, 0, (int)(MouseManager.ScreenWidth - cursor_bitmap.Width + 15));
             int mouseY = Math.Clamp((int)MouseManager.Y, 0, (int)(MouseManager.ScreenHeight - cursor_bitmap.Height + 15));
+            // Assuming termopanX and termopanY are defined elsewhere in your class
 
 
+            HandleTermopanMovement(mouseX, mouseY);
+            canvas.DrawImageAlpha(cursor_bitmap, mouseX, mouseY);
+
+            // Keyboard handling
             if (KeyboardManager.KeyAvailable)
             {
                 var key = KeyboardManager.ReadKey();
@@ -113,12 +127,12 @@ namespace sexOSRepo.Graphics
                     if (showDirectoryListing)
                     {
                         ListDirectoryContents(sexOSKernel.Commands.File.currentDirectory);
-                    }
+                }
                     else
                     {
                         // Clear the directory listing area if turning off
                         ClearDirectoryListingArea();
-                    }
+            }
 
                 }
             }
@@ -322,11 +336,13 @@ namespace sexOSRepo.Graphics
         {
             Termopan topmostInteractedTermopan = null;
 
+            // Iterate through termopane in reverse order to check the topmost termopan first
             for (int i = termopane.Count - 1; i >= 0; i--)
             {
                 Termopan t = termopane[i];
                 if (t.IsOpen() && t.HandleInteraction(mouseX, mouseY, MouseManager.MouseState))
                 {
+                    // If an interaction is detected, break the loop as we only want to interact with the topmost termopan
                     topmostInteractedTermopan = t;
                     break;
                 }
@@ -355,7 +371,7 @@ namespace sexOSRepo.Graphics
 
             DesktopIcon newIcon = new DesktopIcon(iconX, iconY, taskbar_icon_bitmap, termopan);
             desktopIcons.Add(newIcon);
-        }
+            }
 
         public void DrawTaskbar()
         {

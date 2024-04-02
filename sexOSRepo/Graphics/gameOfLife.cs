@@ -4,6 +4,7 @@ using Cosmos.System.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection.Metadata;
 using Console = System.Console;
 using Sys = Cosmos.System;
 
@@ -71,6 +72,8 @@ namespace sexOSKernel.Graphics
             patterns[7] = new Pattern(20, 11, "2o16b2o$bo16bob$bobo12bobob$2b2o12b2o2b$7bo4bo7b$5b2ob4ob2o5b$7bo4bo7b$2b2o12b2o2b$bobo12bobob$bo16bob$2o16b2o!");                   //candy
             patterns[8] = new Pattern(12, 8, "5bob2o$4bo6bo$3b2o3bo2bo$2obo5b2o$2obo5b2o$3b2o3bo2bo$4bo6bo$5bob2o!");                                                               //flying right thingy
             patterns[9] = new Pattern(5, 4, "bo2bo$o4b$o3bo$4o!");                                                                                                                  //smol spaceship
+
+            
         }
 
         private void drawGrid()

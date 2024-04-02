@@ -12,9 +12,19 @@ namespace sexOSKernel.Commands
         }
         public override string Execute(String[] args)
         {
-            string commandList = "Available commands:";
+            string commandList = "Available commands:\n";
 
-            // List all command names
+            // Calculate maximum length of command names
+            int maxLength = 0;
+            foreach (Command cmd in commands)
+            {
+                if (cmd.name.Length > maxLength)
+                {
+                    maxLength = cmd.name.Length;
+                }
+            }
+
+            // List all command names with aligned descriptions
             foreach (Command cmd in commands)
             {
                 commandList += "\n" + cmd.name + "-" + cmd.description; //am adaugat si o descriere pentru fiecare comanda
