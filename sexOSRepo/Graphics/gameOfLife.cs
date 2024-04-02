@@ -243,7 +243,6 @@ namespace sexOSKernel.Graphics
                     for (int i = 0; i < gridHeight; i++)
                         for (int j = 0; j < gridWidth; j++)
                             grid[i][j] = false;
-                    patternToGridPopulation(patterns[0], gridHeight / 2, gridWidth / 2);
 
                     switch (key)
                     {
