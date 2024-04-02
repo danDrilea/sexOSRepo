@@ -38,7 +38,7 @@ namespace sexOSKernel.Graphics
         private const int gridHeight = Height / pixelSize;
         private const int gridWidth = Width / pixelSize;
 
-        private bool[][] grid = new bool[Height][];
+        private bool[][] grid = new bool[gridHeight][];
 
         Random rand = new Random();
 
