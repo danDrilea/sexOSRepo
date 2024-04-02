@@ -2434,6 +2434,7 @@
       <None Remove="badAppleBMP\raton_1024x768.bmp" />
       <None Remove="badAppleBMP\retard.txt" />
       <None Remove="badAppleBMP\termopan.bmp" />
+      <None Remove="GUIBMP\start-button.bmp" />
       <None Remove="GUIBMP\TASKBAR.bmp" />
       <None Remove="GUIBMP\termopan-boop.bmp" />
     </ItemGroup>
@@ -2718,6 +2719,7 @@
       <EmbeddedResource Include="badAppleBMP\frame_0276.bmp" />
       <EmbeddedResource Include="badAppleBMP\frame_0277.bmp" />
       <EmbeddedResource Include="GUIBMP\raton_1024x768.bmp" />
+      <EmbeddedResource Include="GUIBMP\start-button.bmp" />
       <EmbeddedResource Include="GUIBMP\TASKBAR.bmp" />
       <EmbeddedResource Include="GUIBMP\termopan-boop.bmp" />
       <EmbeddedResource Include="GUIBMP\termopan.bmp" />

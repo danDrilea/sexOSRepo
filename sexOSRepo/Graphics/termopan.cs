@@ -7,7 +7,7 @@ namespace sexOSRepo.Graphics
 {
     public class Termopan
     {
-        [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.termopan-boop.bmp")]
+        [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.termopan.bmp")]
         public static byte[] image;
         public static Bitmap bitmap = new Bitmap(354, 224, ColorDepth.ColorDepth32); //termopan
         private int cursor_Width = 32;

@@ -22,6 +22,10 @@ namespace sexOSRepo.Graphics
 
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.TASKBAR.bmp")] public static byte[] taskbar_image;
         public static Bitmap taskbar_bitmap = new Bitmap(1024, 768, ColorDepth.ColorDepth32);//taskbar
+
+        [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.start-button.bmp")] public static byte[] start_image;
+        public static Bitmap start_bitmap = new Bitmap(64, 64, ColorDepth.ColorDepth32);//start btn
+
         public List<Termopan> termopane = new List<Termopan>();
         public static Canvas canvas;
         public desktop()
@@ -35,16 +39,13 @@ namespace sexOSRepo.Graphics
             image_bitmap = new Bitmap(test_image, ColorOrder.BGR);
             cursor_bitmap = new Bitmap(cursor_image, ColorOrder.BGR);
             taskbar_bitmap = new Bitmap(taskbar_image, ColorOrder.BGR);
+            start_bitmap = new Bitmap(start_image, ColorOrder.BGR);
 
         }
         public void DrawText(string text, int x, int y, Color color)
         {
-            // Check if the Canvas supports DrawString directly
             if (canvas != null)
             {
-                // Set the font and color for the text
-                // Note: The actual implementation might differ based on the Cosmos OS version and your project setup
-                // var font =font(; // Example font, adjust as necessary
                 var font = Cosmos.System.Graphics.Fonts.PCScreenFont.Default;
                 canvas.DrawString(text, font, new Pen(color), x, y);
             }
@@ -57,12 +58,14 @@ namespace sexOSRepo.Graphics
             string timeString = currentTime.ToString("HH:mm:ss");//HOUR STRING!!
             string dateString = currentTime.ToString("yyyy-MM-dd"); // Date string
             canvas.DrawImageAlpha(taskbar_bitmap, 0, 733);//768 - cv
+            canvas.DrawImageAlpha(start_bitmap, 0, 733);
+
+
             DrawText(timeString, 950, 737, Color.Black);//ora!!
             DrawText(dateString, 940, 752, Color.Black);//data
             int mouseX = Math.Clamp((int)MouseManager.X, 0, (int)(MouseManager.ScreenWidth - cursor_bitmap.Width + 15));
             int mouseY = Math.Clamp((int)MouseManager.Y, 0, (int)(MouseManager.ScreenHeight - cursor_bitmap.Height + 15));
             // Assuming termopanX and termopanY are defined elsewhere in your class
-
 
             HandleTermopanMovement(mouseX, mouseY);
             canvas.DrawImageAlpha(cursor_bitmap, mouseX, mouseY);
