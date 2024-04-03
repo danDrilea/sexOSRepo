@@ -1,4 +1,5 @@
-﻿using Cosmos.System;
+﻿using Cosmos.Core.Memory;
+using Cosmos.System;
 using Cosmos.System.Graphics;
 using IL2CPU.API.Attribs;
 using System.Collections.Generic;
@@ -879,6 +880,7 @@ namespace sexOSKernel.Graphics
 
                         Thread.Sleep(100);
                     }
+                    Heap.Collect();
                     ShouldExitApple = true;
                 }
             }

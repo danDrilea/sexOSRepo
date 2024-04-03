@@ -49,14 +49,19 @@ namespace sexOSKernel.Commands
                         string newPath = args[1];
                         if (newPath == "..")
                         {
+                            // În cazul în care nu suntem deja în root
                             if (currentDirectory != @"0:\")
                             {
-                                currentDirectory = Path.GetDirectoryName(currentDirectory.TrimEnd('\\')) + @"\";
+                                // Navigăm la directorul părinte
+                                var parentDir = Path.GetDirectoryName(currentDirectory.TrimEnd('\\'));
+                                // Asigurăm că nu setăm currentDirectory la null
+                                currentDirectory = parentDir == null ? @"0:\" : parentDir + @"\";
                             }
                         }
                         else
                         {
-                            string potentialNewPath = Path.Combine(currentDirectory, newPath) + @"\";
+                            // Construim calea potențial nouă și verificăm dacă există
+                            string potentialNewPath = Path.Combine(currentDirectory, newPath).TrimEnd('\\') + @"\";
                             if (Directory.Exists(potentialNewPath))
                             {
                                 currentDirectory = potentialNewPath;

@@ -19,7 +19,8 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
             Paint,
             BadApple,
             Desktop,
-            GameOfLife
+            GameOfLife,
+            Piano
         }
 
         public static Mode currentMode = Mode.Console;
@@ -28,6 +29,7 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
         public static badApple badapple;
         public static desktop desktop;
         public static gameOfLife gameoflife;
+        public static Piano piano;
 
         protected override void BeforeRun()
         {
@@ -56,6 +58,9 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 case Mode.GameOfLife:
                     gameoflife.handleGameOfLifeInputs();
                     break;
+                case Mode.Piano:
+                    piano.HandlePianoInputs();
+                    break;
                 case Mode.Console:
                 default:
                     Console.Write(File.currentDirectory + ">");
@@ -73,6 +78,8 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 exitMode(Mode.Desktop);
             if(gameoflife != null && gameoflife.ShouldExitGameOfLife)
                 exitMode(Mode.GameOfLife);
+            if(piano != null && piano.ShouldExitPiano)
+                exitMode(Mode.Piano);
 
             if(currentMode == Mode.Console)
             {
@@ -102,6 +109,10 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
                 case Mode.GameOfLife:
                     gameOfLife.canvas.Disable();
                     gameoflife= null;
+                    break;
+                case Mode.Piano:
+                    Piano.canvas.Disable();
+                    piano = null;
                     break;
             }
             currentMode = Mode.Console;
