@@ -73,6 +73,7 @@ namespace sexOSKernel.Graphics
                 if (key.Key == ConsoleKeyEx.Escape)
                 {
                     ShouldExitPaint = true;
+                    Heap.Collect();
                 }
                 if (key.Key == ConsoleKeyEx.S) // Trigger save on 'S' key press
                 {

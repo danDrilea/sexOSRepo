@@ -229,6 +229,8 @@ namespace sexOSKernel.Graphics
                 if (key == ConsoleKeyEx.Escape)
                 {
                     ShouldExitSnake = true;
+                    Heap.Collect();
+                    
                 }
                 else if (key == ConsoleKeyEx.W || key == ConsoleKeyEx.UpArrow)
                 {
@@ -276,6 +278,7 @@ namespace sexOSKernel.Graphics
                 check_grow();
                 grid[HeadSnakeI][HeadSnakeJ] = (int)blockState.SnakeHead;
                 drawGrid();
+                Thread.Sleep(100);
                 Thread.Sleep(125);
             }
             else

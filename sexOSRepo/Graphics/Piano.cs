@@ -87,6 +87,7 @@ namespace sexOSRepo.Graphics
                 if (key.Key == ConsoleKeyEx.Escape)
                 {
                     ShouldExitPiano = true;
+                    Heap.Collect();
                 }
             }
             canvas.Display();

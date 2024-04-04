@@ -20,8 +20,7 @@ namespace sexOSKernel//<------ INCEPUT SCOPE KERNEL
             BadApple,
             Desktop,
             GameOfLife,
-            Snake
-            GameOfLife,
+            Snake,
             Piano
         }
 

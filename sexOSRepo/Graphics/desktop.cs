@@ -29,7 +29,7 @@ namespace sexOSRepo.Graphics
 
         [ManifestResourceStream(ResourceName = "sexOSRepo.GUIBMP.start-button.bmp")] public static byte[] taskbar_icon_image;
         private long lastClickTime = 0; // Timestamp of the last click in ticks
-        private readonly long clickCooldown = TimeSpan.FromMilliseconds(20).Ticks; // cooldown for click
+        private readonly long clickCooldown = TimeSpan.FromMilliseconds(100).Ticks; // cooldown for click
         public static Bitmap taskbar_icon_bitmap = new Bitmap(32, 32, ColorDepth.ColorDepth32);//start btn
         private List<Sys.FileSystem.Listing.DirectoryEntry> directoryListing;
         private int startY = 20; // The Y position where the directory listing will start on the canvas
@@ -40,6 +40,7 @@ namespace sexOSRepo.Graphics
         public bool textUpdateRequired = false;
         public desktop()
         {
+            Heap.Collect();
             Instance = this;
             MouseManager.ScreenWidth = 1024;
             MouseManager.ScreenHeight = 768;
@@ -95,6 +96,7 @@ namespace sexOSRepo.Graphics
                 if (key.Key == ConsoleKeyEx.Escape)
                 {
                     shouldExitdesktop = true;
+                    Heap.Collect();
                 }
                 /*
                 else if (key.Key == ConsoleKeyEx.N)
@@ -213,8 +215,8 @@ namespace sexOSRepo.Graphics
             DrawUnminimizedTermopans();
             HandleTermopanMovement(mouseX, mouseY);
             canvas.DrawImageAlpha(cursor_bitmap, mouseX, mouseY);
-            Heap.Collect();
             canvas.Display();
+            Heap.Collect();
         }
 
 
@@ -397,7 +399,6 @@ namespace sexOSRepo.Graphics
                     entryText += " (D)"; // Append (D) to directory names
                 }
                 DrawText(entryText, startX, fileEntryStartY + (i * 20), Color.White); // Increment Y by 20 for each entry
-                Heap.Collect();
             }
         }
         public void ClearDirectoryListingArea()

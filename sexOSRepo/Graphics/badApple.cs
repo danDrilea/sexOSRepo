@@ -869,6 +869,7 @@ namespace sexOSKernel.Graphics
                 if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Escape)
                 {
                     ShouldExitApple = true;
+                    Heap.Collect();
                 }
                 else if (KeyboardManager.ReadKey().Key == ConsoleKeyEx.Enter)
                 {

@@ -217,6 +217,7 @@ namespace sexOSKernel.Graphics
                 if (key == ConsoleKeyEx.Escape)
                 {
                     ShouldExitGameOfLife = true;
+                    Heap.Collect();
                 }
                 else if (key == ConsoleKeyEx.R)
                 {

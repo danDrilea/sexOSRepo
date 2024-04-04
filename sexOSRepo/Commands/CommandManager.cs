@@ -25,6 +25,7 @@ namespace sexOSKernel.Commands
             this.commands.Add(new launchDesktop("desktop", "Starts a GUI with images."));
             this.commands.Add(new launchGameOfLife("life", "Starts Conway's Game Of Life Simulation - Press R for random or L for preset patterns! or C for clear"));
             this.commands.Add(new launchPiano("piano", "A simple piano for making music!"));
+            this.commands.Add(new launchSnake("snake", "snek"));
         }
 
         public String processInput(String input)
